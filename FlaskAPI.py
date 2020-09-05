@@ -1,15 +1,18 @@
 from flask import Flask,jsonify,request
 from flask_restful import Api,Resource
+from MongoOperator import get_connection,read_mongo
 
 app=Flask(__name__)
 api=Api(app)
 
 
-class RemoveDuplicates:
+class RemoveDuplicates(Resource):
     print("inside remove duplicate method")
     def get(self):
         return jsonify({"message":"please use post request"})
+
     def post(self):
+
         return jsonify({"message" : "success"})
 
 api.resource(RemoveDuplicates,"/removeduplicates")

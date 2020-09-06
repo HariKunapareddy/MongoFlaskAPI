@@ -38,8 +38,31 @@ class RemoveDuplicates(Resource):
         save_data(connection, db_name, collection, input_df)
         return jsonify({"message": "success"})
 
+class RemoveColumns(Resource):
+    print("inside remove duplicate method")
 
-api.resource(RemoveDuplicates, "/removeduplicates")
+    def get(self):
+        return jsonify({"message": "please use post request"})
+
+    def post(self):
+        db_name = request.json('db')
+        collection = request.json('collection')
+        cols = request.json('cols')
+        version = request.json('version')
+        new_version = version + 1
+        connection = get_connection(username, password, db_name, host, port)
+        input_df = read_mongo(db_name, collection)
+        input_df.drop(columns=cols, inplace=True)
+        input_df[version] = new_version
+        save_data(connection, db_name, collection, input_df)
+        return jsonify({"message": "success"})
+
+
+
+
+api.add_resource(RemoveDuplicates, "/removeduplicates")
+
+api.add_resource(RemoveColumns,"/removecolumns")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

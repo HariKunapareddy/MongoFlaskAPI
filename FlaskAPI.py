@@ -45,17 +45,18 @@ class RemoveColumns(Resource):
         return jsonify({"message": "please use post request"})
 
     def post(self):
-        db_name = request.json('db')
-        collection = request.json('collection')
-        cols = request.json('cols')
-        version = request.json('version')
+        db_name = request.json['db']
+        collection = request.json['collection']
+        cols = request.json['cols']
+        version = request.json['version']
+        pipeline_id=request.json['pipelineId']
         new_version = version + 1
         connection = get_connection(username, password, db_name, host, port)
         input_df = read_mongo(db_name, collection)
         input_df.drop(columns=cols, inplace=True)
         input_df[version] = new_version
         save_data(connection, db_name, collection, input_df)
-        return jsonify({"message": "success"})
+        return jsonify({"db": db_name, "collection":collection,"version":version,"pipelineId":pipeline_id})
 
 
 
